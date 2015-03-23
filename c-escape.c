@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef const char* (*strfn)(char c);
+
 static char* argv0;
 
 static void
@@ -26,12 +28,12 @@ c_escape(char c)
 }
 
 static void
-c_escape_concat(FILE* out, FILE* in)
+interact(FILE* out, FILE* in, strfn go)
 {
 	int c;
 
 	while ((c = fgetc(in)) != EOF)
-		if (fputs(c_escape((char)c), out))
+		if (fputs(go((char)c), out))
 			err(1, "fputs");
 }
 
@@ -41,6 +43,6 @@ main(int argc, char* argv[])
 	argv0 = *argv, argv++, argc--;
 	if (argc)
 		usage();
-	c_escape_concat(stdout, stdin);
+	interact(stdout, stdin, c_escape);
 	return 0;
 }
