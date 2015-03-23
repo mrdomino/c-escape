@@ -41,17 +41,15 @@ c_escape_concat(FILE* out, FILE* in)
 
 	while ((c = fgetc(in)) != EOF) {
 		(void) c_escape((char)c, buf);
-		if (fputs(buf, out) != 0) {
+		if (fputs(buf, out) != 0)
 			err(1, "fputs");
-		}
 	}
 }
 
 int
 main(int argc, char* argv[])
 {
-	argv0 = argv[0];
-	argv++, argc--;
+	argv0 = *argv, argv++, argc--;
 	if (argc)
 		usage();
 	c_escape_concat(stdout, stdin);
