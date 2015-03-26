@@ -33,8 +33,10 @@ interact(FILE* out, FILE* in, strfn go)
 	int c;
 
 	while ((c = fgetc(in)) != EOF)
-		if (fputs(go((char)c), out))
+		if (fputs(go((char)c), out) == EOF)
 			err(1, "fputs");
+	if (ferror(in))
+		err(1, "fgetc");
 }
 
 int
